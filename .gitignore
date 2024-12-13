@@ -1,23 +1,53 @@
-# Ignore Gradle build output directory
-/build/
+# Системные файлы ОС
+.DS_Store
+Thumbs.db
 
-# Ignore Gradle-specific files
-/.gradle/
+# Файлы IDE
+out/
 
-# Ignore log files
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+
+# Журналы и временные файлы
 *.log
+*.tmp
+*.temp
 
-# Ignore local Gradle properties
-/gradle.properties
-
-# Ignore IntelliJ IDEA files
+# IntelliJ IDEA
 .idea/
 *.iml
+*.ipr
+*.iws
+.idea_modules/
+workspace.xml
+usage.statistics.xml
+tasks.xml
+shelf/
+libraries/
 
-# Исключение конфигурационного файла
-#src/main/resources/config.properties
+# Java
+*.class
 
-# Ignore compiled Java files
+# Логи
+logs/
+
+# Unit тесты
+test-results/
+*.coverage
+*.jacoco
+
+# Другие исключения
 *.jar
 *.war
 *.ear
+
+# Операционная система
+*.swp
+*.swo
+
+# Скрытые файлы и временные настройки
+*.bak
+*.orig
