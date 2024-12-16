@@ -14,6 +14,9 @@ public class DbInitializerListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         HibernateUtil.getSessionFactory();
         log.info("Initial SessionFactory created");
+
+        DataImporter.importData();
+        log.info("Initial players and matches inserted into Database");
     }
 
     @Override
