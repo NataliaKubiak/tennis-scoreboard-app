@@ -14,5 +14,9 @@
 
         <!-- DB schema will be created -->
          <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- Указание Entity-классов -->
+        <mapping class="org.example.entity.Player"/>
+        <mapping class="org.example.entity.Match"/>
     </session-factory>
 </hibernate-configuration>
