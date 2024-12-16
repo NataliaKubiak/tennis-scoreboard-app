@@ -27,7 +27,7 @@ public class NewMatchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        log.info("Processing GET request for new match page.");
+        log.info("Processing GET request for New Match page.");
 
         request.getRequestDispatcher("WEB-INF/templates/new-match.html").forward(request, response);
         log.info("Forwarded to 'new-match.html' template.");
@@ -74,6 +74,9 @@ public class NewMatchServlet extends HttpServlet {
         Player playerTwo = playerService.getOrSavePlayer(playerTwoDto);
         log.info("Players saved or retrieved: Player 1 = {}, Player 2 = {}", playerOne, playerTwo);
 
+        // TODO: 16/12/2024 тут написать логику создания матча
+
+        // TODO: 16/12/2024 исправить редирект на endpoint /match-score?uuid=$match_id
         response.sendRedirect("/match-score");
         log.info("Redirecting to '/match-score'.");
     }
