@@ -1,12 +1,11 @@
-package org.example.tennisscoreboard.service;
+package org.example.service;
 
-import org.example.tennisscoreboard.dao.PlayerDao;
-import org.example.tennisscoreboard.dto.NewPlayerDto;
-import org.example.tennisscoreboard.entity.Player;
-import org.example.tennisscoreboard.mapper.PlayerMapper;
-import org.example.tennisscoreboard.util.HibernateUtil;
+import org.example.dao.PlayerDao;
+import org.example.dto.NewPlayerDto;
+import org.example.entity.Player;
+import org.example.mapper.PlayerMapper;
+import org.example.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import java.util.Optional;
 
@@ -18,8 +17,7 @@ public class PlayerService {
     public Player getOrSavePlayer(NewPlayerDto newPlayerDto) {
         Player player = playerMapper.toEntity(newPlayerDto);
 
-        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
             session.beginTransaction();
 

@@ -1,4 +1,4 @@
-package org.example.tennisscoreboard.view;
+package org.example.view;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;

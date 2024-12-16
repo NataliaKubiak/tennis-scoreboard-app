@@ -1,4 +1,4 @@
-package org.example.tennisscoreboard.util;
+package org.example.util;
 
 import lombok.experimental.UtilityClass;
 

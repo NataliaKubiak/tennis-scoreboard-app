@@ -1,11 +1,8 @@
-package org.example.tennisscoreboard.dao;
+package org.example.dao;
 
 import jakarta.persistence.NoResultException;
-import org.example.tennisscoreboard.entity.Match;
-import org.example.tennisscoreboard.entity.Player;
-import org.example.tennisscoreboard.util.HibernateUtil;
+import org.example.entity.Player;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import java.util.Optional;
 

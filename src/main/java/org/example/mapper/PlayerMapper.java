@@ -1,7 +1,7 @@
-package org.example.tennisscoreboard.mapper;
+package org.example.mapper;
 
-import org.example.tennisscoreboard.dto.NewPlayerDto;
-import org.example.tennisscoreboard.entity.Player;
+import org.example.dto.NewPlayerDto;
+import org.example.entity.Player;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

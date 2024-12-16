@@ -1,4 +1,4 @@
-package org.example.tennisscoreboard.dao;
+package org.example.dao;
 
 import org.hibernate.Session;
 

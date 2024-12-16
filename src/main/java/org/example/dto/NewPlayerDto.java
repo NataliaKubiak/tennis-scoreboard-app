@@ -1,4 +1,4 @@
-package org.example.tennisscoreboard.dto;
+package org.example.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

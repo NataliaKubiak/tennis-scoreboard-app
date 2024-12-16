@@ -1,15 +1,15 @@
-package org.example.tennisscoreboard.controller;
+package org.example.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.tennisscoreboard.dto.NewPlayerDto;
-import org.example.tennisscoreboard.entity.Player;
-import org.example.tennisscoreboard.service.PlayerService;
-import org.example.tennisscoreboard.util.Validator;
-import org.example.tennisscoreboard.view.ThymeleafConfigListener;
+import org.example.dto.NewPlayerDto;
+import org.example.entity.Player;
+import org.example.service.PlayerService;
+import org.example.util.Validator;
+import org.example.view.ThymeleafConfigListener;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.web.IWebExchange;
