@@ -1,7 +1,9 @@
 package org.example.tennisscoreboard.service;
 
 import org.example.tennisscoreboard.dao.PlayerDao;
+import org.example.tennisscoreboard.dto.NewPlayerDto;
 import org.example.tennisscoreboard.entity.Player;
+import org.example.tennisscoreboard.mapper.PlayerMapper;
 import org.example.tennisscoreboard.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,9 +13,10 @@ import java.util.Optional;
 public class PlayerService {
 
     private PlayerDao playerDao = new PlayerDao();
+    private PlayerMapper playerMapper = PlayerMapper.INSTANCE;
 
-    public Player getOrSavePlayer(Player player) {
-        // TODO: 14/12/2024 тут надо передать параметром PlayerDto и написать PlayerDto -> Player
+    public Player getOrSavePlayer(NewPlayerDto newPlayerDto) {
+        Player player = playerMapper.toEntity(newPlayerDto);
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
