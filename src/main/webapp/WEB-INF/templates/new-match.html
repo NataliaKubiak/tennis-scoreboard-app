@@ -16,14 +16,14 @@
     <section class="nav-header">
         <div class="brand">
             <div class="nav-toggle">
-                <img src="../../images/menu.png" alt="Logo" class="logo">
+                <img src="images/menu.png" alt="Logo" class="logo">
             </div>
             <span class="logo-text">TennisScoreboard</span>
         </div>
         <div>
             <nav class="nav-links">
-                <a class="nav-link" href="#">Home</a> <!-- Вставить Ссылку на главную -->
-                <a class="nav-link" href="#">Matches</a> <!-- Вставить Ссылку на список прошедших матчей -->
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/matches">Matches</a>
             </nav>
         </div>
     </section>
@@ -34,7 +34,7 @@
             <h1>Start new match</h1>
             <div class="new-match-image"></div>
             <div class="form-container center">
-                <form method="post" action="#" th:action="@{/match-score}"> <!-- Вставить редирект на страницу счета матча и заменить # на значение -->
+                <form method="post" action="#" th:action="@{/match-score}">
 
                     <!-- Сообщение об ошибке, отображается только если есть значение переменной errorMessage -->
                     <p th:if="${errorMessage != null}" th:text="${errorMessage}" style="color: red;"></p>
