@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-// TODO: 14/12/2024 проверить так ли пишется
 @EqualsAndHashCode(of = "name")
 @Builder
 @Entity
