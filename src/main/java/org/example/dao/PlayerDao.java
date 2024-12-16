@@ -20,13 +20,15 @@ public class PlayerDao implements Dao<Player> {
         return player;
     }
 
-    @Override
-    public Optional<Player> getByPlayerName(String name, Session session) {
+    public Optional<Player> getPlayerByName(String name, Session session) {
         log.info("Searching for player with name: {}", name);
 
         try {
             Player player = session.createQuery(
-                    "SELECT p FROM Player p WHERE p.name = :name", Player.class)
+                            "SELECT p " +
+                                    "FROM Player p " +
+                                    "WHERE p.name = :name",
+                            Player.class)
                     .setParameter("name", name)
                     .getSingleResult();
 
