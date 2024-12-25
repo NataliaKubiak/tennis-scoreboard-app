@@ -8,6 +8,6 @@ import java.util.Locale;
 public class Validator {
 
     public static boolean isSameName(String name1, String name2) {
-        return name1.toLowerCase(Locale.ROOT).equals(name2.toLowerCase(Locale.ROOT));
+        return name1.equals(name2);
     }
 }

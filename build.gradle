@@ -34,8 +34,9 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:6.6.3.Final'
     implementation 'com.h2database:h2:2.2.224'
 
-    //thymeleaf
-    implementation 'org.thymeleaf:thymeleaf:3.1.1.RELEASE'
+    //jstl
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0'
 
     //lombok
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
