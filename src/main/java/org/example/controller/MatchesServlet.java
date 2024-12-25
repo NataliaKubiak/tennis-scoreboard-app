@@ -18,7 +18,7 @@ public class MatchesServlet extends HttpServlet {
             throws ServletException, IOException {
         log.info("Processing GET request for Matches page.");
 
-        request.getRequestDispatcher("WEB-INF/templates/matches.html").forward(request, response);
-        log.info("Forwarded to 'matches.html' template.");
+        request.getRequestDispatcher("WEB-INF/matches.jsp").forward(request, response);
+        log.info("Forwarded to 'matches.jsp' template.");
     }
 }

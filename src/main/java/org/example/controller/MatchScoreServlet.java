@@ -19,7 +19,7 @@ public class MatchScoreServlet extends HttpServlet {
             throws ServletException, IOException {
         log.info("Processing GET request for Match Score page.");
 
-        request.getRequestDispatcher("WEB-INF/templates/match-score.html").forward(request, response);
-        log.info("Forwarded to 'match-score.html' template.");
+        request.getRequestDispatcher("WEB-INF/match-score.jsp").forward(request, response);
+        log.info("Forwarded to 'match-score.jsp' template.");
     }
 }
