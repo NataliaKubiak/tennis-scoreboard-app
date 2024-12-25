@@ -49,18 +49,18 @@
                 <tbody>
                 <tr class="player1">
                     <td class="table-text">${player1.name}</td>
-                    <td class="table-text">${player1.sets}</td>
-                    <td class="table-text">${player1.games}</td>
-                    <td class="table-text">${player1.points}</td>
+                    <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
+                    <td class="table-text">${player1.games != null ? player1.games : '0'}</td>
+                    <td class="table-text">${player1.points != null ? player1.points : '0'}</td>
                     <td class="table-text">
                         <div class="score-btn">Score</div>
                     </td>
                 </tr>
                 <tr class="player2">
                     <td class="table-text">${player2.name}</td>
-                    <td class="table-text">${player2.sets}</td>
-                    <td class="table-text">${player2.games}</td>
-                    <td class="table-text">${player2.points}</td>
+                    <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
+                    <td class="table-text">${player1.games != null ? player1.games : '0'}</td>
+                    <td class="table-text">${player1.points != null ? player1.points : '0'}</td>
                     <td class="table-text">
                         <div class="score-btn">Score</div>
                     </td>
