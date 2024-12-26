@@ -157,6 +157,12 @@ footer {
     display: none;
 }
 
+/* Error Page */
+.emoji {
+    font-size: 150px;
+    margin: 20px 0;
+}
+
 /* New Match */
 
 .new-match-image {
