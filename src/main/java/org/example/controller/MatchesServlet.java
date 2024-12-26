@@ -19,6 +19,6 @@ public class MatchesServlet extends HttpServlet {
         log.info("Processing GET request for Matches page.");
 
         request.getRequestDispatcher("WEB-INF/matches.jsp").forward(request, response);
-        log.info("Forwarded to 'matches.jsp' template.");
+        log.info("Forwarded to 'matches.jsp'");
     }
 }

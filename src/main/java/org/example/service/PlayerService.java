@@ -1,5 +1,7 @@
 package org.example.service;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.example.dao.PlayerDao;
 import org.example.dto.NewPlayerDto;
@@ -26,7 +28,7 @@ public class PlayerService {
             session.beginTransaction();
             log.info("Transaction started.");
 
-            Optional<Player> maybePlayer = playerDao.getByPlayerName(player.getName(), session);
+            Optional<Player> maybePlayer = playerDao.getPlayerByName(player.getName(), session);
 
             if (maybePlayer.isPresent()) {
                 log.info("Player with name '{}' already exists: {}", player.getName(), maybePlayer.get());
