@@ -6,20 +6,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.example.dao.MatchDao;
 import org.example.dto.NewPlayerDto;
 import org.example.entity.Player;
+import org.example.service.OngoingMatchesService;
 import org.example.service.PlayerService;
 import org.example.util.Validator;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.UUID;
 
 @Log4j2
 @WebServlet("/new-match")
 public class NewMatchServlet extends HttpServlet {
 
     private final PlayerService playerService = new PlayerService();
+    private final OngoingMatchesService ongoingMatchesService = OngoingMatchesService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,7 +49,7 @@ public class NewMatchServlet extends HttpServlet {
             request.setAttribute("errorMessage", "Players have the same name: " + playerOneName);
 
             request.getRequestDispatcher("/WEB-INF/new-match.jsp").forward(request, response);
-            log.info("Rendered 'new-match' template with error message.");
+            log.info("Rendered 'new-match.jsp' with error message.");
             return;
         }
 
@@ -63,10 +65,9 @@ public class NewMatchServlet extends HttpServlet {
         Player playerTwo = playerService.getOrSavePlayer(playerTwoDto);
         log.info("Players saved or retrieved: Player 1 = {}, Player 2 = {}", playerOne, playerTwo);
 
-        // TODO: 16/12/2024 тут написать логику создания матча
+        UUID newMatchId = ongoingMatchesService.addNewMatchToMap(playerOne, playerTwo);
 
-        // TODO: 16/12/2024 исправить редирект на endpoint /match-score?uuid=$match_id
-        response.sendRedirect("/match-score");
+        response.sendRedirect("/match-score?uuid=" + newMatchId);
         log.info("Redirecting to '/match-score'.");
     }
 }
