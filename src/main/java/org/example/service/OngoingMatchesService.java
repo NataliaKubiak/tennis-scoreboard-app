@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.example.entity.MatchScore;
 import org.example.entity.Player;
+import org.example.entity.PlayerScore;
+import org.example.entity.Point;
 
 import java.util.List;
 import java.util.UUID;
@@ -50,5 +52,15 @@ public class OngoingMatchesService {
                 matchScore.getPlayer1(),
                 matchScore.getPlayer2()
         );
+    }
+
+    public Point updateMatchScoreWithId(UUID id, String winnerName) {
+        MatchScore matchScore = ongoingMatches.get(id);
+        PlayerScore winnerScore = matchScore.getPlayerScoreByPlayerName(winnerName);
+
+        Point currentPoints = winnerScore.getPoints();
+        winnerScore.setPoints(currentPoints.next());
+
+        return winnerScore.getPoints();
     }
 }

@@ -26,6 +26,14 @@ public class MatchScore {
         matchScore.put(player2, new PlayerScore(player2));
     }
 
+    public PlayerScore getPlayerScoreByPlayerName(String name) {
+        if (player1.getName().equals(name)) {
+            return matchScore.get(player1);
+        } else {
+            return matchScore.get(player2);
+        }
+    }
+
 //    public UUID createNewMatch(Player player1, Player player2) {
 //        uuid = UUID.randomUUID();
 //

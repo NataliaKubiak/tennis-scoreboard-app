@@ -51,23 +51,24 @@
                     <td class="table-text">${playerOneName}</td>
                     <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
                     <td class="table-text">${player1.games != null ? player1.games : '0'}</td>
-                    <td class="table-text">${player1.points != null ? player1.points : '0'}</td>
+                    <td class="table-text">${playerOnePoints != null ? playerOnePoints : '0'}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+                        <form method="POST" action="${pageContext.request.contextPath}/match-score">
+<%--                            <input type="hidden" name="playerName" value="${playerOneName}" />--%>
+                            <input type="hidden" name="playerNo" value="1" />
+                            <button class="score-btn" type="submit">Score</button>
+                        </form>
                     </td>
                 </tr>
                 <tr class="player2">
                     <td class="table-text">${playerTwoName}</td>
-                    <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
-                    <td class="table-text">${player1.games != null ? player1.games : '0'}</td>
-                    <td class="table-text">${player1.points != null ? player1.points : '0'}</td>
-<%--                    <td class="table-text">--%>
-<%--                        <div class="score-btn">Score</div>--%>
-<%--                    </td>--%>
+                    <td class="table-text">${player2.sets != null ? player1.sets : '0'}</td>
+                    <td class="table-text">${player2.games != null ? player1.games : '0'}</td>
+                    <td class="table-text">${playerTwoPoints != null ? playerTwoPoints : '0'}</td>
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
-                            <!-- Можно передать ID игрока -->
-                            <input type="hidden" name="playerId" value="${player1.id}" />
+<%--                            <input type="hidden" name="playerName" value="${playerTwoName}" />--%>
+                            <input type="hidden" name="playerNo" value="2" />
                             <button class="score-btn" type="submit">Score</button>
                         </form>
                     </td>
