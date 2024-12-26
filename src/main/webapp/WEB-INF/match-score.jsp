@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${player1.name}</td>
+                    <td class="table-text">${playerOneName}</td>
                     <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
                     <td class="table-text">${player1.games != null ? player1.games : '0'}</td>
                     <td class="table-text">${player1.points != null ? player1.points : '0'}</td>
@@ -57,12 +57,19 @@
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${player2.name}</td>
+                    <td class="table-text">${playerTwoName}</td>
                     <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
                     <td class="table-text">${player1.games != null ? player1.games : '0'}</td>
                     <td class="table-text">${player1.points != null ? player1.points : '0'}</td>
+<%--                    <td class="table-text">--%>
+<%--                        <div class="score-btn">Score</div>--%>
+<%--                    </td>--%>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+                        <form method="POST" action="${pageContext.request.contextPath}/match-score">
+                            <!-- Можно передать ID игрока -->
+                            <input type="hidden" name="playerId" value="${player1.id}" />
+                            <button class="score-btn" type="submit">Score</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
