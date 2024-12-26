@@ -9,14 +9,14 @@ public class PlayerScore {
 
     private Player player;
 
-    private Point points;
+    private Points points;
     private int games;
     private int sets;
 
     public PlayerScore(Player player) {
         this.player = player;
 
-        points = Point.LOVE;
+        points = Points.LOVE;
         games = 0;
         sets = 0;
     }

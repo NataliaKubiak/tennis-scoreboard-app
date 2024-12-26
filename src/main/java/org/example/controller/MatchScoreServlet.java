@@ -7,14 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
-import org.example.entity.Player;
-import org.example.entity.Point;
+import org.example.entity.MatchScore;
+import org.example.entity.Points;
 import org.example.service.OngoingMatchesService;
 import org.example.util.Validator;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @Log4j2
@@ -63,22 +62,50 @@ public class MatchScoreServlet extends HttpServlet {
 
         switch (playerNo) {
             case "1" -> {
-                Point updatedPoints = ongoingMatchesService.updateMatchScoreWithId(matchId, playerOneName);
+                MatchScore updatedMatchScore = ongoingMatchesService.updateMatchScoreWithId(matchId, playerOneName, playerTwoName);
 
-                if (updatedPoints.getValue() != null) {
-                    session.setAttribute("playerOnePoints", updatedPoints.getValue());
+                Points winnerPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getPoints();
+                if (winnerPoints.getValue() != null) {
+                    session.setAttribute("playerOnePoints", winnerPoints.getValue());
                 } else {
-                    session.setAttribute("playerOnePoints", updatedPoints);
+                    session.setAttribute("playerOnePoints", winnerPoints);
                 }
+
+                int winnerGames = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getGames();
+                session.setAttribute("playerOneGames", winnerGames);
+
+                Points looserPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getPoints();
+                if (looserPoints.getValue() != null) {
+                    session.setAttribute("playerTwoPoints", looserPoints.getValue());
+                } else {
+                    session.setAttribute("playerTwoPoints", looserPoints);
+                }
+
+                int looserGames = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getGames();
+                session.setAttribute("playerTwoGames", looserGames);
             }
             case "2" -> {
-                Point updatedPoints = ongoingMatchesService.updateMatchScoreWithId(matchId, playerTwoName);
+                MatchScore updatedMatchScore = ongoingMatchesService.updateMatchScoreWithId(matchId, playerTwoName, playerOneName);
 
-                if (updatedPoints.getValue() != null) {
-                    session.setAttribute("playerTwoPoints", updatedPoints.getValue());
+                Points winnerPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getPoints();
+                if (winnerPoints.getValue() != null) {
+                    session.setAttribute("playerTwoPoints", winnerPoints.getValue());
                 } else {
-                    session.setAttribute("playerTwoPoints", updatedPoints);
+                    session.setAttribute("playerTwoPoints", winnerPoints);
                 }
+
+                int winnerGames = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getGames();
+                session.setAttribute("playerTwoGames", winnerGames);
+
+                Points looserPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getPoints();
+                if (looserPoints.getValue() != null) {
+                    session.setAttribute("playerOnePoints", looserPoints.getValue());
+                } else {
+                    session.setAttribute("playerOnePoints", looserPoints);
+                }
+
+                int looserGames = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getGames();
+                session.setAttribute("playerOneGames", looserGames);
             }
             default -> {
                 return;

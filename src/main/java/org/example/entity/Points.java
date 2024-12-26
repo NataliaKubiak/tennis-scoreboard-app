@@ -1,8 +1,6 @@
 package org.example.entity;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-
-public enum Point {
+public enum Points {
     LOVE(0),
     FIFTEEN(15),
     THIRTY(30),
@@ -12,7 +10,7 @@ public enum Point {
 
     private final Integer value;
 
-    Point(Integer value) {
+    Points(Integer value) {
         this.value = value;
     }
 
@@ -20,7 +18,7 @@ public enum Point {
         return value;
     }
 
-    public Point next() {
+    public Points next() {
         switch (this) {
             case LOVE: return FIFTEEN;
             case FIFTEEN: return THIRTY;
@@ -31,7 +29,7 @@ public enum Point {
         }
     }
 
-    public Point previous() {
+    public Points previous() {
         switch (this) {
             case ADVANTAGE: return DEUCE;
             case DEUCE: return FORTY;
