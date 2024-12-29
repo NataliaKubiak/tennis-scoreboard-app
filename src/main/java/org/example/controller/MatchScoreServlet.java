@@ -43,9 +43,12 @@ public class MatchScoreServlet extends HttpServlet {
         }
 
         UUID id = UUID.fromString(queryParam.split("=")[1]);
+        log.info("Parsed match ID: {}", id);
         session.setAttribute("matchId", id);
 
         List<String> playersNamesByMatchId = ongoingMatchesService.getPlayersNamesByMatchId(id);
+        log.info("Got player names: {}, {}", playersNamesByMatchId.get(0), playersNamesByMatchId.get(1));
+
         session.setAttribute("playerOneName", playersNamesByMatchId.get(0));
         session.setAttribute("playerTwoName", playersNamesByMatchId.get(1));
 
@@ -55,75 +58,81 @@ public class MatchScoreServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("Processing POST request for Match Score page.");
+
         HttpSession session = request.getSession();
         UUID matchId = (UUID) session.getAttribute("matchId");
         String playerOneName = (String) session.getAttribute("playerOneName");
         String playerTwoName = (String) session.getAttribute("playerTwoName");
 
         String playerNo = request.getParameter("playerNo");
+        log.info("Player number received from request: {}", playerNo);
+
+        MatchScore matchScore = ongoingMatchesService.getMatchScoreById(matchId);
 
         switch (playerNo) {
             case "1" -> {
-                MatchScore matchScore = ongoingMatchesService.getMatchScoreById(matchId);
-                MatchScore updatedMatchScore = matchScoreCalcService.calculateScore(matchScore, playerOneName, playerTwoName);
-
-                if (!updatedMatchScore.isTiebreak()) {
-                    Points winnerPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getPoints();
-                    setPoints(session, winnerPoints, "playerOnePoints");
-
-                    Points looserPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getPoints();
-                    setPoints(session, looserPoints, "playerTwoPoints");
-
-                } else {
-                    int winnerTiebreakPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getTiebreakPoints();
-                    session.setAttribute("playerOnePoints", winnerTiebreakPoints);
-
-                    int looserTiebreakPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getTiebreakPoints();
-                    session.setAttribute("playerTwoPoints", looserTiebreakPoints);
-                }
-
-                int winnerGames = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getGames();
-                session.setAttribute("playerOneGames", winnerGames);
-
-                int looserGames = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getGames();
-                session.setAttribute("playerTwoGames", looserGames);
-
+                log.info("Processing score for Player 1.");
+                processPlayerScore(session, matchScore, playerOneName, playerTwoName, "playerOne", "playerTwo");
             }
             case "2" -> {
-                MatchScore matchScore = ongoingMatchesService.getMatchScoreById(matchId);
-                MatchScore updatedMatchScore = matchScoreCalcService.calculateScore(matchScore, playerTwoName, playerOneName);
-
-                if (!updatedMatchScore.isTiebreak()) {
-                    Points winnerPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getPoints();
-                    setPoints(session, winnerPoints, "playerTwoPoints");
-
-                    Points looserPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getPoints();
-                    setPoints(session, looserPoints, "playerOnePoints");
-
-                } else {
-                    int winnerTiebreakPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getTiebreakPoints();
-                    session.setAttribute("playerTwoPoints", winnerTiebreakPoints);
-
-                    int looserTiebreakPoints = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getTiebreakPoints();
-                    session.setAttribute("playerOnePoints", looserTiebreakPoints);
-                }
-
-                int winnerGames = updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getGames();
-                session.setAttribute("playerTwoGames", winnerGames);
-
-                int looserGames = updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getGames();
-                session.setAttribute("playerOneGames", looserGames);
-
+                log.info("Processing score for Player 2.");
+                processPlayerScore(session, matchScore, playerTwoName, playerOneName, "playerTwo", "playerOne");
             }
             default -> {
+                log.warn("Invalid player number received: {}", playerNo);
                 return;
             }
         }
 
         request.getRequestDispatcher("WEB-INF/match-score.jsp").forward(request, response);
+        log.info("Forwarded to 'match-score.jsp'");
     }
 
-    private void setPoints(HttpSession session, Points points, String attributeName) {
+    private void processPlayerScore(HttpSession session, MatchScore matchScore,
+                                    String winnerName, String looserName,
+                                    String winnerPrefix, String looserPrefix) {
+
+        log.info("Calculating score for winner={} and looser={}", winnerName, looserName);
+        MatchScore updatedMatchScore = matchScoreCalcService.calculateScore(matchScore, winnerName, looserName);
+
+        if (!updatedMatchScore.isTiebreak()) {
+            log.info("Not a tiebreak situation. Updating points.");
+            Points winnerPoints = getPoints(updatedMatchScore, winnerName);
+            setPointsAsSessionAttribute(session, winnerPoints, winnerPrefix + "Points");
+
+            Points looserPoints = getPoints(updatedMatchScore, looserName);
+            setPointsAsSessionAttribute(session, looserPoints, looserPrefix + "Points");
+
+        } else {
+            log.info("Tiebreak situation. Updating tiebreak points.");
+            int winnerTiebreakPoints = getTiebreakPoints(updatedMatchScore, winnerName);
+            session.setAttribute(winnerPrefix + "Points", winnerTiebreakPoints);
+
+            int looserTiebreakPoints = getTiebreakPoints(updatedMatchScore, looserName);
+            session.setAttribute(looserPrefix + "Points", looserTiebreakPoints);
+        }
+
+        int winnerGames = getGames(updatedMatchScore, winnerName);
+        session.setAttribute(winnerPrefix + "Games", winnerGames);
+
+        int looserGames = getGames(updatedMatchScore, looserName);
+        session.setAttribute(looserPrefix + "Games", looserGames);
+    }
+
+    private int getGames(MatchScore updatedMatchScore, String playerOneName) {
+        return updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getGames();
+    }
+
+    private int getTiebreakPoints(MatchScore updatedMatchScore, String playerOneName) {
+        return updatedMatchScore.getPlayerScoreByPlayerName(playerOneName).getTiebreakPoints();
+    }
+
+    private Points getPoints(MatchScore updatedMatchScore, String playerTwoName) {
+        return updatedMatchScore.getPlayerScoreByPlayerName(playerTwoName).getPoints();
+    }
+
+    private void setPointsAsSessionAttribute(HttpSession session, Points points, String attributeName) {
         if (points.getValue() != null) {
             session.setAttribute(attributeName, points.getValue());
         } else {
