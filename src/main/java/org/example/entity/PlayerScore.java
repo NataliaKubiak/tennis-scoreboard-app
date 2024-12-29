@@ -13,11 +13,14 @@ public class PlayerScore {
     private int games;
     private int sets;
 
+    private int tiebreakPoints;
+
     public PlayerScore(Player player) {
         this.player = player;
 
         points = Points.LOVE;
         games = 0;
         sets = 0;
+        tiebreakPoints = 0;
     }
 }

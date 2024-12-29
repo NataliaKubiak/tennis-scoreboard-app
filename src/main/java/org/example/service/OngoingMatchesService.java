@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.example.entity.MatchScore;
@@ -19,9 +20,8 @@ public class OngoingMatchesService {
     private static final OngoingMatchesService INSTANCE = new OngoingMatchesService();
 
     private final int MAP_SIZE = 20;
-//    @Getter
+    @Getter
     private ConcurrentMap<UUID, MatchScore> ongoingMatches = new ConcurrentHashMap<>(MAP_SIZE);
-    private MatchScoreCalcService matchScoreCalcService = new MatchScoreCalcService();
 
     public static OngoingMatchesService getInstance() {
         return INSTANCE;
@@ -53,17 +53,8 @@ public class OngoingMatchesService {
         );
     }
 
-    public MatchScore updateMatchScoreWithId(UUID id, String winnerName, String looserName) {
-        MatchScore matchScore = ongoingMatches.get(id);
-        PlayerScore winnerScore = matchScore.getPlayerScoreByPlayerName(winnerName);
-        PlayerScore looserScore = matchScore.getPlayerScoreByPlayerName(looserName);
-
-//        Point currentWinnerPoints = winnerScore.getPoints();
-//        Point currentLooserPoints = looserScore.getPoints();
-        matchScoreCalcService.calculateScore(winnerScore, looserScore);
-
-//        winnerScore.setPoints(currentWinnerPoints.next());
-
-        return matchScore;
+    public MatchScore getMatchScoreById(UUID id) {
+        return ongoingMatches.get(id);
     }
+
 }
