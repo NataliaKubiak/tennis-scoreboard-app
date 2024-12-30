@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
+import org.example.dto.MatchDto;
 import org.example.entity.Match;
 import org.example.entity.MatchScore;
 import org.example.entity.Points;
@@ -88,10 +89,9 @@ public class MatchScoreServlet extends HttpServlet {
             }
         }
 
-        //if game finished -> Finished Matches Persist Service -> show winner and block 'Score' btns
         if (matchScore.isMatchFinished()) {
-            // TODO: 30/12/2024 переписать чтобы возвращался matchDTO
-            Match savedMatch = finishedMatchesPersistService.saveMatch(matchScore);
+            MatchDto matchDto = finishedMatchesPersistService.saveMatch(matchScore);
+
         } else {
             request.getRequestDispatcher("WEB-INF/match-score.jsp").forward(request, response);
             log.info("Forwarded to 'match-score.jsp'");
