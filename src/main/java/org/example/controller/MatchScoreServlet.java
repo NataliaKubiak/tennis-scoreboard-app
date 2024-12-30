@@ -15,6 +15,7 @@ import org.example.service.FinishedMatchesPersistService;
 import org.example.service.MatchScoreCalcService;
 import org.example.service.OngoingMatchesService;
 import org.example.util.Validator;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +28,8 @@ public class MatchScoreServlet extends HttpServlet {
     private final OngoingMatchesService ongoingMatchesService = OngoingMatchesService.getInstance();
     private final MatchScoreCalcService matchScoreCalcService = new MatchScoreCalcService();
     private final FinishedMatchesPersistService finishedMatchesPersistService = new FinishedMatchesPersistService();
+
+    private static final String TROPHY_ICON = "\uD83C\uDFC6";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -91,11 +94,28 @@ public class MatchScoreServlet extends HttpServlet {
 
         if (matchScore.isMatchFinished()) {
             MatchDto matchDto = finishedMatchesPersistService.saveMatch(matchScore);
+            renderFinishedMatchScore(session, matchScore);
+            disableScoreButtons(session);
+        }
+
+        request.getRequestDispatcher("WEB-INF/match-score.jsp").forward(request, response);
+        log.info("Forwarded to 'match-score.jsp'");
+    }
+
+    private void renderFinishedMatchScore(HttpSession session, MatchScore matchScore) {
+        if (session.getAttribute("playerOneName").equals(matchScore.getWinner().getName())) {
+            session.setAttribute("playerOneGames", "WINNER!");
+            session.setAttribute("playerOnePoints", TROPHY_ICON);
 
         } else {
-            request.getRequestDispatcher("WEB-INF/match-score.jsp").forward(request, response);
-            log.info("Forwarded to 'match-score.jsp'");
+            session.setAttribute("playerTwoGames", "WINNER!");
+            session.setAttribute("playerTwoPoints", TROPHY_ICON);
         }
+    }
+
+    private void disableScoreButtons(HttpSession session) {
+        session.setAttribute("disableScoreBtnPlayerOne", true);
+        session.setAttribute("disableScoreBtnPlayerTwo", true);
     }
 
     private void processPlayersScores(HttpSession session, MatchScore matchScore,

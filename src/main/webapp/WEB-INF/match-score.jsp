@@ -55,7 +55,10 @@
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="playerNo" value="1" />
-                            <button class="score-btn" type="submit">Score</button>
+                            <button class="score-btn" type="submit"
+                            ${disableScoreBtnPlayerOne ? 'disabled' : ''}>
+                                Score
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -67,7 +70,10 @@
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="playerNo" value="2" />
-                            <button class="score-btn" type="submit">Score</button>
+                            <button class="score-btn" type="submit"
+                            ${disableScoreBtnPlayerTwo ? 'disabled' : ''}>
+                                Score
+                            </button>
                         </form>
                     </td>
                 </tr>
