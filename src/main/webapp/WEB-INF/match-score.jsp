@@ -49,12 +49,11 @@
                 <tbody>
                 <tr class="player1">
                     <td class="table-text">${playerOneName}</td>
-                    <td class="table-text">${player1.sets != null ? player1.sets : '0'}</td>
+                    <td class="table-text">${playerOneSets != null ? playerOneSets : '0'}</td>
                     <td class="table-text">${playerOneGames != null ? playerOneGames : '0'}</td>
                     <td class="table-text">${playerOnePoints != null ? playerOnePoints : '0'}</td>
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
-<%--                            <input type="hidden" name="playerName" value="${playerOneName}" />--%>
                             <input type="hidden" name="playerNo" value="1" />
                             <button class="score-btn" type="submit">Score</button>
                         </form>
@@ -62,12 +61,11 @@
                 </tr>
                 <tr class="player2">
                     <td class="table-text">${playerTwoName}</td>
-                    <td class="table-text">${player2.sets != null ? player1.sets : '0'}</td>
+                    <td class="table-text">${playerTwoSets != null ? playerTwoSets : '0'}</td>
                     <td class="table-text">${playerTwoGames != null ? playerTwoGames : '0'}</td>
                     <td class="table-text">${playerTwoPoints != null ? playerTwoPoints : '0'}</td>
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
-<%--                            <input type="hidden" name="playerName" value="${playerTwoName}" />--%>
                             <input type="hidden" name="playerNo" value="2" />
                             <button class="score-btn" type="submit">Score</button>
                         </form>

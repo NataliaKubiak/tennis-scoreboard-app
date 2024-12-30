@@ -3,7 +3,6 @@ package org.example.entity;
 import lombok.Data;
 
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -13,6 +12,8 @@ public class MatchScore {
 
     private Player player1;
     private Player player2;
+
+    private Player winner;
 
     private boolean tiebreak;
 
@@ -35,6 +36,20 @@ public class MatchScore {
             return matchScore.get(player1);
         } else {
             return matchScore.get(player2);
+        }
+    }
+
+    public boolean isMatchFinished() {
+        if (matchScore.get(player1).getSets() == 2) {
+            winner = player1;
+            return true;
+
+        } else if (matchScore.get(player2).getSets() == 2) {
+            winner = player2;
+            return true;
+
+        } else {
+            return false;
         }
     }
 

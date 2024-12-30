@@ -1,6 +1,5 @@
 package org.example.service;
 
-import lombok.Getter;
 import org.example.entity.MatchScore;
 import org.example.entity.PlayerScore;
 import org.example.entity.Points;
@@ -102,30 +101,25 @@ public class MatchScoreCalcService {
              winnerScore.setTiebreakPoints(winnerTiebreakPoints + 1);
 
         } else if (winnerTiebreakPoints == 6 && looserTiebreakPoints <= 5) {
-            int winnerSets = winnerScore.getSets();
-            winnerScore.setSets(winnerSets + 1);
-
-            winnerScore.setGames(0);
-            looserScore.setGames(0);
-            winnerScore.setTiebreakPoints(0);
-            looserScore.setTiebreakPoints(0);
-
-            matchScore.setTiebreak(false);
+            finishTiebreak();
 
         } else if (winnerTiebreakPoints >= 7 && looserTiebreakPoints == (winnerTiebreakPoints - 1)) {
-            int winnerSets = winnerScore.getSets();
-            winnerScore.setSets(winnerSets + 1);
-
-            winnerScore.setGames(0);
-            looserScore.setGames(0);
-            winnerScore.setTiebreakPoints(0);
-            looserScore.setTiebreakPoints(0);
-
-            matchScore.setTiebreak(false);
+            finishTiebreak();
 
         } else if (winnerTiebreakPoints >= 7 && looserTiebreakPoints == winnerTiebreakPoints) {
             winnerScore.setTiebreakPoints(winnerTiebreakPoints + 1);
         }
     }
 
+    private void finishTiebreak() {
+        int winnerSets = winnerScore.getSets();
+        winnerScore.setSets(winnerSets + 1);
+
+        winnerScore.setGames(0);
+        looserScore.setGames(0);
+        winnerScore.setTiebreakPoints(0);
+        looserScore.setTiebreakPoints(0);
+
+        matchScore.setTiebreak(false);
+    }
 }

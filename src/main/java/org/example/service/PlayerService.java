@@ -23,7 +23,7 @@ public class PlayerService {
         Player player = playerMapper.toEntity(newPlayerDto);
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            log.info("Opened Hibernate session.");
+            log.info("Opened Hibernate session in PlayerService.");
 
             session.beginTransaction();
             log.info("Transaction started.");

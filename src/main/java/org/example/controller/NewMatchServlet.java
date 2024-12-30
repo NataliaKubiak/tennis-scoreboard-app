@@ -61,6 +61,7 @@ public class NewMatchServlet extends HttpServlet {
                 .build();
 
         //передать в PlayerService Player1DTO и Player2DTO - получить игрока или создать его в БД
+        // TODO: 30/12/2024 переписать чтобы возвращался playerDTO
         Player playerOne = playerService.getOrSavePlayer(playerOneDto);
         Player playerTwo = playerService.getOrSavePlayer(playerTwoDto);
         log.info("Players saved or retrieved: Player 1 = {}, Player 2 = {}", playerOne, playerTwo);
