@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface MatchScoreToMatchMapper {
     MatchScoreToMatchMapper INSTANCE = Mappers.getMapper(MatchScoreToMatchMapper.class);
 
-    @Mapping(target = "uuid", ignore = true)
-    @Mapping(target = "tiebreak", ignore = true)
+//    @Mapping(target = "uuid", ignore = true)
+//    @Mapping(target = "tiebreak", ignore = true)
     Match toEntity(MatchScore matchScore);
 }
