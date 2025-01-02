@@ -5,10 +5,15 @@ import lombok.extern.log4j.Log4j2;
 import org.example.entity.Player;
 import org.hibernate.Session;
 
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
 public class PlayerDao implements Dao<Player> {
+
+    public List<Player> getAll(Session session) {
+        return session.createQuery("FROM Player", Player.class).list();
+    }
 
     @Override
     public Player save(Player player, Session session) {
