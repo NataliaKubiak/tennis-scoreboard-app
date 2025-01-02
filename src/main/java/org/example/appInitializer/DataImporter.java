@@ -20,9 +20,11 @@ import java.util.stream.Collectors;
 public class DataImporter {
 
     private PlayerDao playerDao = new PlayerDao();
+
     private static final List<String> playerNames = Arrays.asList(
             "R. Federer", "R. Nadal", "N. Djokovic", "S. Williams", "V. Williams",
             "M. Sharapova", "S. Halep", "P. Sampras", "A. Agassi", "S. Graf");
+    private static final int MATCHES_AMOUNT = 10;
 
     public static void importData() {
         importPlayers();
@@ -71,7 +73,7 @@ public class DataImporter {
 
             // Создаем запрос для вставки матчей
             StringBuilder queryBuilder = new StringBuilder("INSERT INTO matches (player1, player2, winner) VALUES ");
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < MATCHES_AMOUNT; i++) {
                 queryBuilder.append("(:player1_" + i + ", :player2_" + i + ", :winner_" + i + ")");
                 if (i < 9) {
                     queryBuilder.append(", ");
@@ -83,7 +85,7 @@ public class DataImporter {
 
             Random random = new Random();
             // Заполняем параметры для 10 матчей
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < MATCHES_AMOUNT; i++) {
                 int randomIndex1 = random.nextInt(players.size());
                 int randomIndex2;
                 do {
