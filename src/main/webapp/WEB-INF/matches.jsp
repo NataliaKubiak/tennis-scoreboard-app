@@ -25,7 +25,7 @@
         <div>
             <nav class="nav-links">
                 <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="#">Matches</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
             </nav>
         </div>
     </section>
@@ -33,13 +33,18 @@
 <main>
     <div class="container">
         <h1>Matches</h1>
+
         <div class="input-container">
-            <input class="input-filter" placeholder="Filter by name" type="text" />
-            <div>
-                <a href="#"> <!-- вот тут ссылку вставить -->
-                    <button class="btn-filter">Reset Filter</button>
-                </a>
-            </div>
+            <form method="get" action="${pageContext.request.contextPath}/matches" class="form-matches">
+                <input class="input-filter"
+                       placeholder="Filter by name"
+                       type="text"
+                       name="filter_by_player_name"
+                       value="${filter_by_player_name}"/>
+            </form>
+            <a href="${pageContext.request.contextPath}/matches">
+                <button class="btn-filter">Reset Filter</button>
+            </a>
         </div>
 
         <table class="table-matches">
@@ -48,39 +53,42 @@
                 <th>Player Two</th>
                 <th>Winner</th>
             </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
+            <c:forEach var="match" items="${matches}">
+                <tr>
+                    <td>${match.player1.name}</td>
+                    <td>${match.player2.name}</td>
+                    <td><span class="winner-name-td">${match.winner.name}</span></td>
+                </tr>
+            </c:forEach>
         </table>
 
         <div class="pagination">
-            <a class="prev" href="#"> < </a>
-            <a class="num-page current" href="#">1</a>
-            <a class="num-page" href="#">2</a>
-            <a class="num-page" href="#">3</a>
-            <a class="next" href="#"> > </a>
+            <!-- Кнопка "Назад" -->
+            <c:if test="${currentPage > 1}">
+                <a class="prev"
+                   href="${pageContext.request.contextPath}/matches?page=${currentPage - 1}
+                   <c:if test="${not empty filter_by_player_name}">
+           &filter_by_player_name=${filter_by_player_name}
+       </c:if>">
+                    < </a>
+            </c:if>
+
+            <!-- Номера страниц -->
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <a class="num-page ${i == currentPage ? 'current' : ''}"
+                   href="${pageContext.request.contextPath}/matches?page=${i}<c:if test='${not empty filter_by_player_name}'>&filter_by_player_name=${filter_by_player_name}</c:if>">
+                        ${i}
+                </a>
+            </c:forEach>
+
+            <!-- Кнопка "Вперёд" -->
+            <c:if test="${currentPage < totalPages}">
+                <a class="next"
+                   href="${pageContext.request.contextPath}/matches?page=${currentPage + 1}
+       <c:if test='${not empty filter_by_player_name}'>&filter_by_player_name=${filter_by_player_name}</c:if>">
+                    >
+                </a>
+            </c:if>
         </div>
     </div>
 </main>

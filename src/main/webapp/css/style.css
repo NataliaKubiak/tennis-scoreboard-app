@@ -429,7 +429,10 @@ footer {
 /* Finished matches */
 
 .form-matches {
-    width: 100%;
+    width: 100%; /* Форма занимает всю ширину контейнера */
+    display: flex; /* Для выравнивания содержимого формы по горизонтали */
+    gap: 10px; /* Расстояние между строкой поиска и кнопкой */
+    margin: 0; /* Убирает отступы формы */
 }
 
 .input-container {
@@ -440,6 +443,7 @@ footer {
 
 .input-filter {
     width: 100%;
+    box-sizing: border-box; /* Учитывает padding и border в ширине */
     border-radius: 15px;
     background-color: #dddddd;
     border: none;
