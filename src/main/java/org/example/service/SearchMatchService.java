@@ -2,7 +2,9 @@ package org.example.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.example.dao.MatchDao;
+import org.example.dto.MatchDto;
 import org.example.entity.Match;
+import org.example.mapper.MatchMapper;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 
@@ -13,13 +15,15 @@ import java.util.List;
 public class SearchMatchService {
 
     MatchDao matchDao = new MatchDao();
+    MatchMapper matchMapper = MatchMapper.INSTANCE;
 
-    public List<Match> searchMatchesByPlayerName(String playerName, int pageNo, int pageSize) {
+    public List<MatchDto> searchMatchesByPlayerName(String playerName, int pageNo, int pageSize) {
         log.info("Searching matches. Player name: '{}', Page: {}, Page size: {}", playerName, pageNo, pageSize);
 
-        List<Match> matches = new ArrayList<>();
+        List<MatchDto> matchDtoList = new ArrayList<>();
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Match> matches = new ArrayList<>();
             session.beginTransaction();
 
             if (playerName != null && !playerName.isEmpty()) {
@@ -30,13 +34,14 @@ public class SearchMatchService {
             }
 
             session.getTransaction().commit();
-            log.info("Successfully retrieved {} matches.", matches.size());
+            matchDtoList = matchMapper.toDtoList(matches);
 
+            log.info("Successfully retrieved {} matches.", matches.size());
         } catch (Exception e) {
             log.error("Error during Search Matches", e);
         }
 
-        return matches;
+        return matchDtoList;
     }
 
     public int getTotalRecordsAmount(String filter) {

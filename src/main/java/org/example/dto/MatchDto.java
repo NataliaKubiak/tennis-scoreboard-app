@@ -1,7 +1,9 @@
 package org.example.dto;
 
+import lombok.Data;
 import org.example.entity.Player;
 
+@Data
 public class MatchDto {
 
     private Player player1;

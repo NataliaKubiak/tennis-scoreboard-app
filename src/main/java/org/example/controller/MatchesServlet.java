@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.example.dto.MatchDto;
 import org.example.entity.Match;
 import org.example.service.SearchMatchService;
 
@@ -35,7 +36,7 @@ public class MatchesServlet extends HttpServlet {
             pageNo = 1;
         }
 
-        List<Match> matches = searchMatchService.searchMatchesByPlayerName(filterByPlayerName, pageNo, PAGE_SIZE);
+        List<MatchDto> matches = searchMatchService.searchMatchesByPlayerName(filterByPlayerName, pageNo, PAGE_SIZE);
         int totalRecords = searchMatchService.getTotalRecordsAmount(filterByPlayerName);
         int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
 
