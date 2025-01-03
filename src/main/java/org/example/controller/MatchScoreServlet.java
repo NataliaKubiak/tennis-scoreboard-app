@@ -14,6 +14,7 @@ import org.example.exception.InvalidQueryParameterException;
 import org.example.service.FinishedMatchesPersistService;
 import org.example.service.MatchScoreCalcService;
 import org.example.service.OngoingMatchesService;
+import org.example.util.AttributeHelper;
 import org.example.util.Validator;
 
 import java.io.IOException;
@@ -27,8 +28,6 @@ public class MatchScoreServlet extends HttpServlet {
     private final OngoingMatchesService ongoingMatchesService = OngoingMatchesService.getInstance();
     private final MatchScoreCalcService matchScoreCalcService = new MatchScoreCalcService();
     private final FinishedMatchesPersistService finishedMatchesPersistService = new FinishedMatchesPersistService();
-
-    private static final String TROPHY_ICON = "\uD83C\uDFC6";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,13 +58,13 @@ public class MatchScoreServlet extends HttpServlet {
 
         MatchScore matchScore = ongoingMatchesService.getMatchScoreById(uuid);
 
-        setMatchScoreAttributes(request, matchScore, playerOneName, playerTwoName, "playerOne", "playerTwo");
+        AttributeHelper.setMatchScoreAttributes(request, matchScore, playerOneName, playerTwoName, "playerOne", "playerTwo");
 
         if (matchScore.isMatchFinished()) {
             finishedMatchesPersistService.saveMatch(matchScore);
 
-            renderFinishedMatchScore(session, request, matchScore);
-            disableScoreButtons(request);
+            AttributeHelper.renderFinishedMatchScore(session, request, matchScore);
+            AttributeHelper.disableScoreButtons(request);
 
             ongoingMatchesService.removeMatchFromMap(uuid);
         }
@@ -111,80 +110,5 @@ public class MatchScoreServlet extends HttpServlet {
 
         response.sendRedirect("/match-score?uuid=" + uuid);
         log.info("Redirected to 'match-score.jsp'");
-    }
-
-    private void setMatchScoreAttributes(HttpServletRequest request, MatchScore matchScore,
-                                         String winnerName, String looserName,
-                                         String winnerPrefix, String looserPrefix) {
-        if (!matchScore.isTiebreak()) {
-            log.info("Not a tiebreak situation. Getting points");
-            Points winnerPoints = getPoints(matchScore, winnerName);
-            setPointsAsRequestAttribute(request, winnerPoints, winnerPrefix + "Points");
-
-            Points looserPoints = getPoints(matchScore, looserName);
-            setPointsAsRequestAttribute(request, looserPoints, looserPrefix + "Points");
-
-        } else {
-            log.info("Tiebreak situation. Getting tiebreak points.");
-            int winnerTiebreakPoints = getTiebreakPoints(matchScore, winnerName);
-            request.setAttribute(winnerPrefix + "Points", winnerTiebreakPoints);
-
-            int looserTiebreakPoints = getTiebreakPoints(matchScore, looserName);
-            request.setAttribute(looserPrefix + "Points", looserTiebreakPoints);
-        }
-
-        //передаем games в jsp
-        int winnerGames = getGames(matchScore, winnerName);
-        request.setAttribute(winnerPrefix + "Games", winnerGames);
-
-        int looserGames = getGames(matchScore, looserName);
-        request.setAttribute(looserPrefix + "Games", looserGames);
-
-        //передаем Sets в jsp
-        int winnerSets = getSets(matchScore, winnerName);
-        request.setAttribute(winnerPrefix + "Sets", winnerSets);
-
-        int looserSets = getSets(matchScore, looserName);
-        request.setAttribute(looserPrefix + "Sets", looserSets);
-    }
-
-    private void setPointsAsRequestAttribute(HttpServletRequest request, Points points, String attributeName) {
-        if (points.getValue() != null) {
-            request.setAttribute(attributeName, points.getValue());
-        } else {
-            request.setAttribute(attributeName, points);
-        }
-    }
-
-    private int getSets(MatchScore updatedMatchScore, String playerName) {
-        return updatedMatchScore.getPlayerScoreByPlayerName(playerName).getSets();
-    }
-
-    private int getGames(MatchScore updatedMatchScore, String playerName) {
-        return updatedMatchScore.getPlayerScoreByPlayerName(playerName).getGames();
-    }
-
-    private int getTiebreakPoints(MatchScore updatedMatchScore, String playerName) {
-        return updatedMatchScore.getPlayerScoreByPlayerName(playerName).getTiebreakPoints();
-    }
-
-    private Points getPoints(MatchScore updatedMatchScore, String playerName) {
-        return updatedMatchScore.getPlayerScoreByPlayerName(playerName).getPoints();
-    }
-
-    private void renderFinishedMatchScore(HttpSession session, HttpServletRequest request, MatchScore matchScore) {
-        if (session.getAttribute("playerOneName").equals(matchScore.getWinner().getName())) {
-            request.setAttribute("playerOneGames", "WINNER!");
-            request.setAttribute("playerOnePoints", TROPHY_ICON);
-
-        } else {
-            request.setAttribute("playerTwoGames", "WINNER!");
-            request.setAttribute("playerTwoPoints", TROPHY_ICON);
-        }
-    }
-
-    private void disableScoreButtons(HttpServletRequest request) {
-        request.setAttribute("disableScoreBtnPlayerOne", true);
-        request.setAttribute("disableScoreBtnPlayerTwo", true);
     }
 }
