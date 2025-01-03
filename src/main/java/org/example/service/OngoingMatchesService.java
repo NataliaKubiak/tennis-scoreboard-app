@@ -5,9 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.example.dao.PlayerDao;
+import org.example.dto.PlayerDto;
 import org.example.entity.MatchScore;
 import org.example.entity.Player;
 import org.example.entity.PlayerScore;
+import org.example.mapper.PlayerMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.concurrent.ConcurrentMap;
 public class OngoingMatchesService {
 
     private static final OngoingMatchesService INSTANCE = new OngoingMatchesService();
+    private PlayerMapper playerMapper = PlayerMapper.INSTANCE;
 
     private final int MAP_SIZE = 20;
     @Getter
@@ -29,15 +32,20 @@ public class OngoingMatchesService {
         return INSTANCE;
     }
 
-    public UUID addNewMatchToMap(Player player1, Player player2) {
-        MatchScore matchScore = new MatchScore(player1, player2);
+    public UUID addNewMatchToMap(PlayerDto playerOneDto, PlayerDto playerTwoDto) {
+        Player playerOne = playerMapper.toEntity(playerOneDto);
+        Player playerTwo = playerMapper.toEntity(playerTwoDto);
+
+        MatchScore matchScore = new MatchScore(playerOne, playerTwo);
         UUID matchId = matchScore.getUuid();
 
         ongoingMatches.putIfAbsent(matchId, matchScore);
         return matchId;
     }
 
-    public Optional<UUID> getMatchIdByPlayers(Player playerOne, Player playerTwo) {
+    public Optional<UUID> getMatchIdByPlayers(PlayerDto playerOneDto, PlayerDto playerTwoDto) {
+        Player playerOne = playerMapper.toEntity(playerOneDto);
+        Player playerTwo = playerMapper.toEntity(playerTwoDto);
 
         for (MatchScore allScores : ongoingMatches.values()) {
             Optional<UUID> maybeMatchId = allScores.getIdByPlayersNames(playerOne, playerTwo);

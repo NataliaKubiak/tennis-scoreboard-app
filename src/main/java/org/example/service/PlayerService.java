@@ -1,10 +1,8 @@
 package org.example.service;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.example.dao.PlayerDao;
-import org.example.dto.NewPlayerDto;
+import org.example.dto.PlayerDto;
 import org.example.entity.Player;
 import org.example.mapper.PlayerMapper;
 import org.example.util.HibernateUtil;
@@ -18,9 +16,9 @@ public class PlayerService {
     private PlayerDao playerDao = new PlayerDao();
     private PlayerMapper playerMapper = PlayerMapper.INSTANCE;
 
-    public Player getOrSavePlayer(NewPlayerDto newPlayerDto) {
-        log.info("Received new player DTO: {}", newPlayerDto);
-        Player player = playerMapper.toEntity(newPlayerDto);
+    public PlayerDto getOrSavePlayer(PlayerDto playerDto) {
+        log.info("Received new player DTO: {}", playerDto);
+        Player player = playerMapper.toEntity(playerDto);
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             log.info("Opened Hibernate session in PlayerService.");
@@ -32,7 +30,8 @@ public class PlayerService {
 
             if (maybePlayer.isPresent()) {
                 log.info("Player with name '{}' already exists: {}", player.getName(), maybePlayer.get());
-                return maybePlayer.get();
+
+                return playerMapper.toDto(maybePlayer.get());
             }
 
             //тут ничего не возвращаем потому что id будет добавлено в Player, который сверху создан из DTO
@@ -45,6 +44,6 @@ public class PlayerService {
             log.error("Error during player retrieval or saving", e);
         }
 
-        return player;
+        return playerMapper.toDto(player);
     }
 }

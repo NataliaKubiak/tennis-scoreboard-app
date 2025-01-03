@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.example.dto.NewPlayerDto;
-import org.example.entity.Player;
+import org.example.dto.PlayerDto;
 import org.example.service.OngoingMatchesService;
 import org.example.service.PlayerService;
 import org.example.util.Validator;
@@ -54,17 +53,16 @@ public class NewMatchServlet extends HttpServlet {
             return;
         }
 
-        NewPlayerDto playerOneDto = NewPlayerDto.builder()
+        PlayerDto newPlayerOneDto = PlayerDto.builder()
                 .name(playerOneName)
                 .build();
-        NewPlayerDto playerTwoDto = NewPlayerDto.builder()
+        PlayerDto newPlayerTwoDto = PlayerDto.builder()
                 .name(playerTwoName)
                 .build();
 
         //передать в PlayerService Player1DTO и Player2DTO - получить игрока или создать его в БД
-        // TODO: 30/12/2024 переписать чтобы возвращался playerDTO
-        Player playerOne = playerService.getOrSavePlayer(playerOneDto);
-        Player playerTwo = playerService.getOrSavePlayer(playerTwoDto);
+        PlayerDto playerOne = playerService.getOrSavePlayer(newPlayerOneDto);
+        PlayerDto playerTwo = playerService.getOrSavePlayer(newPlayerTwoDto);
         log.info("Players saved or retrieved: Player 1 = {}, Player 2 = {}", playerOne, playerTwo);
 
         //достаем UUID уже сущ-его матча (по именам игроков) либо создаем новый матч
