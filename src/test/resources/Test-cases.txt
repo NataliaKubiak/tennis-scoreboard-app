@@ -1,0 +1,31 @@
+Points
+    /**
+     * logic:
+     * + if: winner points 0; 15; 30 -> winnerPoints.next()
+     * if: winner points 40, looser points 0; 15; 30 -> winner games+1 both points -> 0
+     * + if: winner points 30, looser points 40 -> both set to DEUCE
+     * if: winner points DEUCE + looser points DEUCE -> winner points ADVANTAGE
+     * if: winner points DEUCE + looser points ADVANTAGE -> both to DEUCE
+     * if: winner points ADVANTAGE + looser points DEUCE -> winner games+1 both points = 0
+     */
+
+Games
+    /**
+     * logic:
+     * winner games 1, 2, 3, 4, 5; looser games < 6 (1, 2, 3, 4, 5) -> winner games +1
+     * winner games = 6; looser games < 6 (1, 2, 3, 4, 5) -> both games = 0, winner sets+1
+     * winner games = 5; looser games = 6 -> tiebreak starts
+     */
+
+Tiebreak Points
+    /**
+     * logic:
+     * winner points <=5; looser points <=6 -> winner points +1
+     * winner points = 6; looser points = 5 -> winner sets +1, all games = 0, tiebreakPoints -> points
+     * winner points >= 7; looser points = winnerPoints-1 -> winner sets +1, all games = 0, tiebreakPoints -> points
+     * winner points >= 7; looser points = winnerPoints -> winner points +1
+     *
+     */
+
+Sets:
+if one player has Sets == 2 - he won :)
