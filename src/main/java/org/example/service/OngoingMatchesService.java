@@ -4,11 +4,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.example.dao.PlayerDao;
 import org.example.entity.MatchScore;
 import org.example.entity.Player;
 import org.example.entity.PlayerScore;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -35,6 +37,17 @@ public class OngoingMatchesService {
         return matchId;
     }
 
+    public Optional<UUID> getMatchIdByPlayers(Player playerOne, Player playerTwo) {
+
+        for (MatchScore allScores : ongoingMatches.values()) {
+            Optional<UUID> maybeMatchId = allScores.getIdByPlayersNames(playerOne, playerTwo);
+            if (maybeMatchId.isPresent()) {
+                return maybeMatchId;
+            }
+        }
+        return Optional.empty();
+    }
+
     public List<String> getPlayersNamesByMatchId(UUID id) {
         MatchScore matchScore = ongoingMatches.get(id);
 
@@ -44,17 +57,11 @@ public class OngoingMatchesService {
         );
     }
 
-    public List<Player> getPlayersByMatchId(UUID id) {
-        MatchScore matchScore = ongoingMatches.get(id);
-
-        return List.of(
-                matchScore.getPlayer1(),
-                matchScore.getPlayer2()
-        );
-    }
-
     public MatchScore getMatchScoreById(UUID id) {
         return ongoingMatches.get(id);
     }
 
+    public void removeMatchFromMap(UUID id) {
+        ongoingMatches.remove(id);
+    }
 }

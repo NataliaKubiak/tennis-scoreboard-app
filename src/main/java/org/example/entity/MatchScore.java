@@ -3,6 +3,7 @@ package org.example.entity;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -53,11 +54,11 @@ public class MatchScore {
         }
     }
 
-//    public Optional<UUID> getIdByPlayersNames(Player player1, Player player2) {
-//        if (matchScore.get(player1) != null && matchScore.get(player2) != null) {
-//            return Optional.of(uuid);
-//        } else {
-//            return Optional.empty();
-//        }
-//    }
+    public Optional<UUID> getIdByPlayersNames(Player player1, Player player2) {
+        if (matchScore.get(player1) != null && matchScore.get(player2) != null) {
+            return Optional.of(uuid);
+        } else {
+            return Optional.empty();
+        }
+    }
 }

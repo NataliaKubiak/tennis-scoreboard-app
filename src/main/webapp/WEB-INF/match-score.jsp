@@ -55,6 +55,7 @@
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="playerNo" value="1" />
+                            <input type="hidden" name="uuid" value="${uuid}">
                             <button class="score-btn" type="submit"
                             ${disableScoreBtnPlayerOne ? 'disabled' : ''}>
                                 Score
@@ -70,6 +71,7 @@
                     <td class="table-text">
                         <form method="POST" action="${pageContext.request.contextPath}/match-score">
                             <input type="hidden" name="playerNo" value="2" />
+                            <input type="hidden" name="uuid" value="${uuid}">
                             <button class="score-btn" type="submit"
                             ${disableScoreBtnPlayerTwo ? 'disabled' : ''}>
                                 Score

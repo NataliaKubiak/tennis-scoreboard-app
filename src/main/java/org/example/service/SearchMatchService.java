@@ -14,8 +14,8 @@ import java.util.List;
 @Log4j2
 public class SearchMatchService {
 
-    MatchDao matchDao = new MatchDao();
-    MatchMapper matchMapper = MatchMapper.INSTANCE;
+    private final MatchDao matchDao = new MatchDao();
+    private final MatchMapper matchMapper = MatchMapper.INSTANCE;
 
     public List<MatchDto> searchMatchesByPlayerName(String playerName, int pageNo, int pageSize) {
         log.info("Searching matches. Player name: '{}', Page: {}, Page size: {}", playerName, pageNo, pageSize);
@@ -23,7 +23,7 @@ public class SearchMatchService {
         List<MatchDto> matchDtoList = new ArrayList<>();
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Match> matches = new ArrayList<>();
+            List<Match> matches;
             session.beginTransaction();
 
             if (playerName != null && !playerName.isEmpty()) {

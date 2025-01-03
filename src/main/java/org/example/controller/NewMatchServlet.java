@@ -14,6 +14,7 @@ import org.example.util.Validator;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 
 @Log4j2
@@ -66,9 +67,21 @@ public class NewMatchServlet extends HttpServlet {
         Player playerTwo = playerService.getOrSavePlayer(playerTwoDto);
         log.info("Players saved or retrieved: Player 1 = {}, Player 2 = {}", playerOne, playerTwo);
 
-        UUID newMatchId = ongoingMatchesService.addNewMatchToMap(playerOne, playerTwo);
+        //достаем UUID уже сущ-его матча (по именам игроков) либо создаем новый матч
+        UUID matchId;
+        Optional<UUID> maybeMatchId = ongoingMatchesService.getMatchIdByPlayers(playerOne, playerTwo);
 
-        response.sendRedirect("/match-score?uuid=" + newMatchId);
+        if (maybeMatchId.isEmpty()) {
+            matchId = ongoingMatchesService.addNewMatchToMap(playerOne, playerTwo);
+            log.info("Match with Players: {}, {} doesn't exist. Created a New Match with Id: {}",
+                    playerOne, playerTwo, matchId);
+        } else {
+            matchId = maybeMatchId.get();
+            log.info("Match with Players: {}, {} already exist. Got existed Match with Id: {}",
+                    playerOne, playerTwo, matchId);
+        }
+
+        response.sendRedirect("/match-score?uuid=" + matchId);
         log.info("Redirecting to '/match-score'.");
     }
 }
