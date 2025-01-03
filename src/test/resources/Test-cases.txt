@@ -20,10 +20,10 @@ Games
 Tiebreak Points
     /**
      * logic:
-     * winner points <=5; looser points <=6 -> winner points +1
-     * winner points = 6; looser points = 5 -> winner sets +1, all games = 0, tiebreakPoints -> points
-     * winner points >= 7; looser points = winnerPoints-1 -> winner sets +1, all games = 0, tiebreakPoints -> points
-     * winner points >= 7; looser points = winnerPoints -> winner points +1
+     * + winner points <=5; looser points <=6 -> winner points +1
+     * + winner points = 6; looser points = 5 -> winner sets +1, all games = 0, tiebreakPoints -> points
+     * + winner points >= 7; looser points = winnerPoints-1 -> winner sets +1, all games = 0, tiebreakPoints -> points
+     * + winner points >= 7; looser points = winnerPoints -> winner points +1
      *
      */
 
