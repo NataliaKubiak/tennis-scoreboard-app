@@ -58,7 +58,7 @@ public class MatchScoreServlet extends HttpServlet {
 
         MatchScore matchScore = ongoingMatchesService.getMatchScoreById(uuid);
 
-        AttributeHelper.setMatchScoreAttributes(request, matchScore, playerOneName, playerTwoName, "playerOne", "playerTwo");
+        AttributeHelper.setMatchScoreAttributes(request, matchScore, playerOneName, playerTwoName);
 
         if (matchScore.isMatchFinished()) {
             finishedMatchesPersistService.saveMatch(matchScore);

@@ -14,38 +14,37 @@ public class AttributeHelper {
     private static final String TROPHY_ICON = "\uD83C\uDFC6";
 
     public static void setMatchScoreAttributes(HttpServletRequest request, MatchScore matchScore,
-                                               String winnerName, String looserName,
-                                               String winnerPrefix, String looserPrefix) {
+                                               String winnerName, String looserName) {
         if (!matchScore.isTiebreak()) {
             log.info("Not a tiebreak situation. Getting points");
             Points winnerPoints = getPoints(matchScore, winnerName);
-            setPointsAsRequestAttribute(request, winnerPoints, winnerPrefix + "Points");
+            setPointsAsRequestAttribute(request, winnerPoints, "playerOnePoints");
 
             Points looserPoints = getPoints(matchScore, looserName);
-            setPointsAsRequestAttribute(request, looserPoints, looserPrefix + "Points");
+            setPointsAsRequestAttribute(request, looserPoints, "playerTwoPoints");
 
         } else {
             log.info("Tiebreak situation. Getting tiebreak points.");
             int winnerTiebreakPoints = getTiebreakPoints(matchScore, winnerName);
-            request.setAttribute(winnerPrefix + "Points", winnerTiebreakPoints);
+            request.setAttribute("playerOnePoints", winnerTiebreakPoints);
 
             int looserTiebreakPoints = getTiebreakPoints(matchScore, looserName);
-            request.setAttribute(looserPrefix + "Points", looserTiebreakPoints);
+            request.setAttribute("playerTwoPoints", looserTiebreakPoints);
         }
 
         //передаем games в jsp
         int winnerGames = getGames(matchScore, winnerName);
-        request.setAttribute(winnerPrefix + "Games", winnerGames);
+        request.setAttribute("playerOneGames", winnerGames);
 
         int looserGames = getGames(matchScore, looserName);
-        request.setAttribute(looserPrefix + "Games", looserGames);
+        request.setAttribute("playerTwoGames", looserGames);
 
         //передаем Sets в jsp
         int winnerSets = getSets(matchScore, winnerName);
-        request.setAttribute(winnerPrefix + "Sets", winnerSets);
+        request.setAttribute("playerOneSets", winnerSets);
 
         int looserSets = getSets(matchScore, looserName);
-        request.setAttribute(looserPrefix + "Sets", looserSets);
+        request.setAttribute("playerTwoSets", looserSets);
     }
 
     public static void disableScoreButtons(HttpServletRequest request) {
