@@ -342,6 +342,36 @@ class MatchScoreCalcServiceTest {
     }
 
     @Test
+    void testCalcScore_WinnerGetTiebreakPoints_WhenTiebreakPoints_6_6() {
+        //Arrange
+        MatchScore matchScoreMock = mock(MatchScore.class);
+
+        Player playerWinner = new Player(1, "Player1");
+        Player playerLooser = new Player(2, "Player2");
+
+        //initial points before winner won:
+        //winner: TiebreakPoints = 6, games = 6;
+        //looser: TiebreakPoints = 6, games = 6
+        PlayerScore winnerScoreMock = new PlayerScore(playerWinner);
+        winnerScoreMock.setTiebreakPoints(6);
+        winnerScoreMock.setGames(6);
+        PlayerScore looserScoreMock = new PlayerScore(playerLooser);
+        looserScoreMock.setTiebreakPoints(6);
+        looserScoreMock.setGames(6);
+
+        when(matchScoreMock.getPlayerScoreByPlayerName("Player1")).thenReturn(winnerScoreMock);
+        when(matchScoreMock.getPlayerScoreByPlayerName("Player2")).thenReturn(looserScoreMock);
+        when(matchScoreMock.isTiebreak()).thenReturn(true);
+
+        //Act
+        matchScoreCalcService.calculateScore(matchScoreMock, "Player1", "Player2");
+
+        //Assert
+        assertEquals(7, winnerScoreMock.getTiebreakPoints(), "Winner Player should have TiebreakPoints = 7");
+        assertEquals(6, looserScoreMock.getTiebreakPoints(), "Looser Player should have TiebreakPoints = 6");
+    }
+
+    @Test
     void testCalcScore_WinnerGetTiebreakPoints_WhenTiebreakPointsAbove7() {
         //Arrange
         MatchScore matchScoreMock = mock(MatchScore.class);

@@ -97,11 +97,11 @@ public class MatchScoreCalcService {
      */
     private void calculateTiebreak(int winnerTiebreakPoints, int looserTiebreakPoints) {
 
-        if (winnerTiebreakPoints <= 5 && looserTiebreakPoints <=6) {
-             winnerScore.setTiebreakPoints(winnerTiebreakPoints + 1);
-
-        } else if (winnerTiebreakPoints == 6 && looserTiebreakPoints <= 5) {
+        if (winnerTiebreakPoints == 6 && looserTiebreakPoints <= 5) {
             finishTiebreak();
+
+        } else if (winnerTiebreakPoints <= 6 && looserTiebreakPoints <=6) {
+             winnerScore.setTiebreakPoints(winnerTiebreakPoints + 1);
 
         } else if (winnerTiebreakPoints >= 7 && looserTiebreakPoints == (winnerTiebreakPoints - 1)) {
             finishTiebreak();
