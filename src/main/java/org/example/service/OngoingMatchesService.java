@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentMap;
 public class OngoingMatchesService {
 
     private static final OngoingMatchesService INSTANCE = new OngoingMatchesService();
-    private PlayerMapper playerMapper = PlayerMapper.INSTANCE;
+    private final PlayerMapper playerMapper = PlayerMapper.INSTANCE;
 
     private final int MAP_SIZE = 20;
     @Getter

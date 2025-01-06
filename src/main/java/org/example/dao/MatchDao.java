@@ -25,6 +25,10 @@ public class MatchDao implements Dao<Match> {
             log.info("Transaction committed. Match saved: {}", match);
 
             return match;
+
+        } catch (Exception ex) {
+            log.error("Error during Match Saving: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 
@@ -47,6 +51,9 @@ public class MatchDao implements Dao<Match> {
             log.info("Successfully fetched {} matches.", matches.size());
             return matches;
 
+        } catch (Exception ex) {
+            log.error("Error during Fetching all matches: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 
@@ -67,6 +74,9 @@ public class MatchDao implements Dao<Match> {
             log.info("Total matches count: {}", count);
             return count;
 
+        } catch (Exception ex) {
+            log.error("Error during Counting all matches: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 
@@ -95,6 +105,9 @@ public class MatchDao implements Dao<Match> {
             log.info("Successfully fetched {} matches for player '{}'.", matches.size(), name);
             return matches;
 
+        } catch (Exception ex) {
+            log.error("Error during Fetching matches with Player Name: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 
@@ -122,6 +135,9 @@ public class MatchDao implements Dao<Match> {
             log.info("Total matches count for player '{}': {}", name, count);
             return count;
 
+        } catch (Exception ex) {
+            log.error("Error during Counting all matches with Player Name: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 }

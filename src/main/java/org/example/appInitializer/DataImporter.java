@@ -56,6 +56,7 @@ public class DataImporter {
 
         } catch (Exception e) {
             log.error("Error during data import", e);
+            throw e;
         }
     }
 
@@ -107,6 +108,7 @@ public class DataImporter {
 
         } catch (Exception e) {
             log.error("Error during match data import", e);
+            throw e;
         }
     }
 }

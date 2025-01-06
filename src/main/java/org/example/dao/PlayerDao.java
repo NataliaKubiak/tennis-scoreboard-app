@@ -32,6 +32,9 @@ public class PlayerDao implements Dao<Player> {
 
             return player;
 
+        } catch (Exception ex) {
+            log.error("Error during Player Saving: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 
@@ -57,6 +60,9 @@ public class PlayerDao implements Dao<Player> {
 
             return optionalPlayer;
 
+        } catch (Exception ex) {
+            log.error("Error during Searching for player: {}, {}", ex.getMessage(), ex);
+            throw ex;
         }
     }
 }
