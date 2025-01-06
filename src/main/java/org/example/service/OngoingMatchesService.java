@@ -4,11 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.example.dao.PlayerDao;
 import org.example.dto.PlayerDto;
 import org.example.entity.MatchScore;
 import org.example.entity.Player;
-import org.example.entity.PlayerScore;
 import org.example.mapper.PlayerMapper;
 
 import java.util.List;
@@ -25,14 +23,14 @@ public class OngoingMatchesService {
     private final PlayerMapper playerMapper = PlayerMapper.INSTANCE;
 
     private final int MAP_SIZE = 20;
-    @Getter
+
     private ConcurrentMap<UUID, MatchScore> ongoingMatches = new ConcurrentHashMap<>(MAP_SIZE);
 
     public static OngoingMatchesService getInstance() {
         return INSTANCE;
     }
 
-    public UUID addNewMatchToMap(PlayerDto playerOneDto, PlayerDto playerTwoDto) {
+    public UUID addNewMatch(PlayerDto playerOneDto, PlayerDto playerTwoDto) {
         Player playerOne = playerMapper.toEntity(playerOneDto);
         Player playerTwo = playerMapper.toEntity(playerTwoDto);
 

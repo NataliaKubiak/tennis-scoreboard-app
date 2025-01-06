@@ -70,7 +70,7 @@ public class NewMatchServlet extends HttpServlet {
         Optional<UUID> maybeMatchId = ongoingMatchesService.getMatchIdByPlayers(playerOne, playerTwo);
 
         if (maybeMatchId.isEmpty()) {
-            matchId = ongoingMatchesService.addNewMatchToMap(playerOne, playerTwo);
+            matchId = ongoingMatchesService.addNewMatch(playerOne, playerTwo);
             log.info("Match with Players: {}, {} doesn't exist. Created a New Match with Id: {}",
                     playerOne, playerTwo, matchId);
         } else {
