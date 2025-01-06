@@ -2,6 +2,7 @@ package org.example.dao;
 
 import lombok.extern.log4j.Log4j2;
 import org.example.entity.Match;
+import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 
 import java.util.Collections;
@@ -11,53 +12,72 @@ import java.util.List;
 public class MatchDao implements Dao<Match> {
 
     @Override
-    public Match save(Match match, Session session) {
-        log.info("Saving Match: {}", match);
+    public Match save(Match match) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in MatchDAO.save()");
 
-        session.persist(match);
+            session.beginTransaction();
+            log.info("Transaction started. Saving Match: {}", match);
 
-        log.info("Match saved: {}", match);
-        return match;
+            session.persist(match);
+
+            session.getTransaction().commit();
+            log.info("Transaction committed. Match saved: {}", match);
+
+            return match;
+        }
     }
 
-    public List<Match> getAllMatches(Session session, int pageNo, int pageSize) {
+    public List<Match> getAllMatches(int pageNo, int pageSize) {
 //        "SELECT * FROM matches LIMIT ? OFFSET ?";
         log.info("Fetching all matches. Page: {}, Page size: {}", pageNo, pageSize);
 
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in MatchDAO.getAllMatches()");
+
+            session.beginTransaction();
+
             List<Match> matches = session.createQuery("FROM Match", Match.class)
                     .setMaxResults(pageSize)
                     .setFirstResult((pageNo - 1) * pageSize)
                     .list();
+
+            session.getTransaction().commit();
+
             log.info("Successfully fetched {} matches.", matches.size());
             return matches;
 
-        } catch (Exception e) {
-            log.error("Error while fetching all matches", e);
-            return Collections.emptyList();
         }
     }
 
-    public int countAllMatches(Session session) {
+    public int countAllMatches() {
         log.info("Counting all matches in the database.");
 
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in MatchDAO.countAllMatches()");
+
+            session.beginTransaction();
+
             Long matchesAmount = (Long) session.createQuery("SELECT COUNT(m) FROM Match m")
                     .uniqueResult();
+
+            session.getTransaction().commit();
+
             int count = matchesAmount != null ? matchesAmount.intValue() : 0;
             log.info("Total matches count: {}", count);
             return count;
 
-        } catch (Exception e) {
-            log.error("Error while counting all matches", e);
-            return 0;
         }
     }
 
-    public List<Match> getMatchesByPlayerName(Session session, int pageNo, int pageSize, String name) {
+    public List<Match> getMatchesByPlayerName(int pageNo, int pageSize, String name) {
         log.info("Fetching matches for player name: '{}'. Page: {}, Page size: {}", name, pageNo, pageSize);
 
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in MatchDAO.getMatchesByPlayerName()");
+
+            session.beginTransaction();
+
             List<Match> matches = session.createQuery(
                             "SELECT m " +
                                     "FROM Match m " +
@@ -70,19 +90,22 @@ public class MatchDao implements Dao<Match> {
                     .setMaxResults(pageSize)
                     .setFirstResult((pageNo - 1) * pageSize)
                     .list();
+
+            session.getTransaction().commit();
             log.info("Successfully fetched {} matches for player '{}'.", matches.size(), name);
             return matches;
 
-        } catch (Exception e) {
-            log.error("Error while fetching matches for player '{}'", name, e);
-            return Collections.emptyList();
         }
     }
 
-    public int countAllMatchesWithFilter(Session session, String name) {
+    public int countAllMatchesWithFilter(String name) {
         log.info("Counting matches for player name filter: '{}'.", name);
 
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in MatchDAO.countAllMatchesWithFilter()");
+
+            session.beginTransaction();
+
             Long matchesAmount = (Long) session.createQuery(
                             "SELECT COUNT(m) " +
                                     "FROM Match m " +
@@ -92,12 +115,13 @@ public class MatchDao implements Dao<Match> {
                                     "OR p2.name = :playerName")
                     .setParameter("playerName", name)
                     .uniqueResult();
+
+            session.getTransaction().commit();
+
             int count = matchesAmount != null ? matchesAmount.intValue() : 0;
             log.info("Total matches count for player '{}': {}", name, count);
             return count;
-        } catch (Exception e) {
-            log.error("Error while counting matches for player '{}'", name, e);
-            return 0;
+
         }
     }
 }

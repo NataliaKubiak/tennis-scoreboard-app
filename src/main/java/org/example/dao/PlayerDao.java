@@ -3,6 +3,7 @@ package org.example.dao;
 import jakarta.persistence.NoResultException;
 import lombok.extern.log4j.Log4j2;
 import org.example.entity.Player;
+import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 
 import java.util.List;
@@ -16,33 +17,46 @@ public class PlayerDao implements Dao<Player> {
     }
 
     @Override
-    public Player save(Player player, Session session) {
-        log.info("Saving player: {}", player);
+    public Player save(Player player) {
 
-        session.persist(player);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in PlayerDAO.save()");
 
-        log.info("Player saved: {}", player);
-        return player;
+            session.beginTransaction();
+            log.info("Transaction started. Saving player: {}", player);
+
+            session.persist(player);
+
+            session.getTransaction().commit();
+            log.info("Transaction committed. Player saved: {}", player);
+
+            return player;
+
+        }
     }
 
-    public Optional<Player> getPlayerByName(String name, Session session) {
+    public Optional<Player> getPlayerByName(String name) {
         log.info("Searching for player with name: {}", name);
 
-        try {
-            Player player = session.createQuery(
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            log.info("Opened Hibernate session in PlayerDAO.getPlayerByName()");
+
+            session.beginTransaction();
+            log.info("Transaction started.");
+
+            Optional<Player> optionalPlayer = session.createQuery(
                             "SELECT p " +
                                     "FROM Player p " +
                                     "WHERE p.name = :name",
                             Player.class)
                     .setParameter("name", name)
-                    .getSingleResult();
+                    .uniqueResultOptional();
 
-            log.info("Player found: {}", player);
-            return Optional.of(player);
+            session.getTransaction().commit();
+            log.info("Transaction committed.");
 
-        } catch (NoResultException e) {
-            log.info("Player with name '{}' not found.", name);
-            return Optional.empty();
+            return optionalPlayer;
+
         }
     }
 }

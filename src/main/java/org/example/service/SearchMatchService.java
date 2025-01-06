@@ -20,50 +20,32 @@ public class SearchMatchService {
     public List<MatchDto> searchMatchesByPlayerName(String playerName, int pageNo, int pageSize) {
         log.info("Searching matches. Player name: '{}', Page: {}, Page size: {}", playerName, pageNo, pageSize);
 
-        List<MatchDto> matchDtoList = new ArrayList<>();
+        List<Match> matches;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Match> matches;
-            session.beginTransaction();
+        if (playerName != null && !playerName.isEmpty()) {
+            matches = matchDao.getMatchesByPlayerName(pageNo, pageSize, playerName);
 
-            if (playerName != null && !playerName.isEmpty()) {
-                matches = matchDao.getMatchesByPlayerName(session, pageNo, pageSize, playerName);
-
-            } else {
-                matches = matchDao.getAllMatches(session, pageNo, pageSize);
-            }
-
-            session.getTransaction().commit();
-            matchDtoList = matchMapper.toDtoList(matches);
-
-            log.info("Successfully retrieved {} matches.", matches.size());
-        } catch (Exception e) {
-            log.error("Error during Search Matches", e);
+        } else {
+            matches = matchDao.getAllMatches(pageNo, pageSize);
         }
 
-        return matchDtoList;
+        log.info("Successfully retrieved {} matches.", matches.size());
+
+        return matchMapper.toDtoList(matches);
     }
 
     public int getTotalRecordsAmount(String filter) {
         log.info("Calculating total records. Filter: '{}'", filter);
-        int totalRecords = 0;
+        int totalRecords;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            session.beginTransaction();
+        if (filter != null && !filter.isEmpty()) {
+            totalRecords = matchDao.countAllMatchesWithFilter(filter);
 
-            if (filter != null && !filter.isEmpty()) {
-                totalRecords = matchDao.countAllMatchesWithFilter(session, filter);
-
-            } else {
-                totalRecords = matchDao.countAllMatches(session);
-            }
-
-            session.getTransaction().commit();
-            log.info("Total records calculated: {}", totalRecords);
-
-        } catch (Exception e) {
-            log.error("Error during Search Total Matches Amount", e);
+        } else {
+            totalRecords = matchDao.countAllMatches();
         }
+
+        log.info("Total records calculated: {}", totalRecords);
 
         return totalRecords;
     }
